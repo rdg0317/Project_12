@@ -1,0 +1,28 @@
+name: "CI Trigger: Terraform Plan"
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan (Task 1)
+        run: terraform plan -out=tfplan
+
+      - name: Upload Plan Artifact (Task 2)
+        # This saves the file to GitHub's storage
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan-file
+          path: tfplan
